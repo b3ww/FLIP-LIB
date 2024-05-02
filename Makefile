@@ -18,10 +18,10 @@ BUILD_DIR = build
 
 
 SRCS = 	sources/App.cpp				\
-		sources/MapPack.cpp			\
 		sources/Payload.cpp			\
 		sources/SerialString.cpp	\
 		sources/Client.cpp			\
+		sources/Callback.cpp		\
 
 OBJS = $(patsubst sources/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
