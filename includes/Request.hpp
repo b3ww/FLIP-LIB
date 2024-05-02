@@ -20,6 +20,7 @@ namespace flip {
             Request() = delete;
             Request(const Payload &, CallbackManager &);
             const Payload &getPayload(void);
+            const Payload getPayload(void) const;
             const CallbackManager &getCallback(void);
     };
 }

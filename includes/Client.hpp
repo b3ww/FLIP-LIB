@@ -9,6 +9,8 @@
 
 #include <string>
 #include <limits>
+#include <thread>
+#include <semaphore.h>
 #include <queue>
 
 #include "Serializable.hpp"
@@ -22,19 +24,22 @@ namespace flip {
             Client(const std::string &, const uint16_t &);
             ~Client() = default;
 
-            void addToSendRequest(const Request &request);
-
+            void newRequest(const Request &request);
+            void handleRequest(const Request &request);
         private:
             std::string _ip;
             uint16_t _port;
 
+            sem_t _pendingRequests;
+
+
             std::queue<std::pair<Socket, Request>> _toSendRequests;
-            std::queue<std::pair<Socket, Request>> _pendingRequests;
+            // std::queue<std::pair<Socket, Request>> _pendingRequests;
             std::queue<Request> _callbackRequests;
     };
 
     void operator>>(const Request &request, Client client)
     {
-        client.addToSendRequest(request);
+        client.newRequest(request);
     }
 }

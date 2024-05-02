@@ -18,6 +18,11 @@ namespace flip {
         return _payload;
     }
 
+    const Payload Request::getPayload(void) const
+    {
+        return _payload;
+    }
+
     const CallbackManager &Request::getCallback(void)
     {
         return _callbackManager;

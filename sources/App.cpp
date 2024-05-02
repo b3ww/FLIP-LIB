@@ -58,9 +58,8 @@ namespace flip {
         }
     }
 
-    void App::handleClient(Socket clientSocket)
+    void App::handleClient(const Socket clientSocket)
     {
-        // Socket &clientSocket = *clientSocketPtr;
         std::string clientID = clientSocket.getID();
 
         std::cout << "Connection: " << clientID << std::endl;
