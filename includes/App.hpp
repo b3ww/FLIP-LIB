@@ -9,7 +9,6 @@
 
 #include <unordered_map>
 #include <functional>
-#include "Serializable.hpp"
 #include <string>
 #include <memory>
 #include <map>
@@ -18,6 +17,8 @@
 #include <arpa/inet.h>
 #include <semaphore.h>
 
+#include "Serializable.hpp"
+#include "Socket.hpp"
 
 namespace flip {
     typedef std::function<void(flip::serialStream __stream)> __FLIP_route;
@@ -28,7 +29,7 @@ namespace flip {
             const std::string &_name;
             const __FLIP_routeMap &_routesMap;
 
-            int _serverSocket;
+            Socket _serverSocket;
 
             struct ClientData {
                 std::queue<std::string> fifo;
@@ -38,7 +39,7 @@ namespace flip {
             sem_t requests;
             std::unordered_map<std::string, ClientData> _clientDataMap;
         public:
-            void handleClient(int, sockaddr_in);
+            void handleClient(std::shared_ptr<Socket>);
             App(uint16_t, const std::string &, const __FLIP_routeMap &);
             ~App(void);
             void run(void);

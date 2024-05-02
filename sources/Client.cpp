@@ -13,4 +13,8 @@ namespace flip {
     {
 
     }
+
+    int request(const serialStream &)
+    {
+    }
 }
