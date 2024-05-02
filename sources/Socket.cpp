@@ -69,10 +69,8 @@ namespace flip {
     std::string Socket::receive(void) const
     {
         char buffer[BUFFER_SIZE];
-        ssize_t nb_bytes = 0;
+        ssize_t nb_bytes = recv(_fd, buffer, BUFFER_SIZE - 1, 0);
 
-        for (int nb = recv(_fd, buffer, BUFFER_SIZE - 1, 0); nb == BUFFER_SIZE - 1; nb_bytes += nb)
-            nb = recv(_fd, buffer, BUFFER_SIZE - 1, 0);
         if (nb_bytes == -1)
             throw;
         return std::string(buffer, nb_bytes);
