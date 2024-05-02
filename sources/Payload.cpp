@@ -7,9 +7,15 @@
 
 #include "Payload.hpp"
 #include <string>
+#include <iostream>
 
 namespace flip {
-    Payload::Payload(const std::string &routeName, SerializableUint16 code, serialStream serialized):
+    Payload::Payload(const serialStream &serialized)
+    {
+        deserialize(serialized);
+    }
+
+    Payload::Payload(const std::string &routeName, SerializableUint16 code, const serialStream &serialized):
         _routeName(routeName), _code(code), _serialized(serialized)
     {
         if (routeName.length() > 64)
@@ -18,12 +24,17 @@ namespace flip {
 
     serialStream Payload::serialize(void) const
     {
-        return _routeName + _code.serialize() + _serialized;
+        std::string routeNameCopy = _routeName;
+
+        routeNameCopy.resize(64, '\0');
+        return routeNameCopy + _code.serialize() + _serialized;
     }
 
-    void Payload::deserialize(const serialStream &)
+    void Payload::deserialize(const serialStream &serializable)
     {
-
+        _routeName = serializable.substr(0, 64);
+        _code.deserialize(serializable.substr(64, 2));
+        _serialized = serializable.substr(66);
     }
 
 }

@@ -5,17 +5,17 @@
 ** Srting.cpp
 */
 
-#include "String.hpp"
+#include "SerialString.hpp"
 
 namespace flip {
-    SerialString::SerialString(const std::string& data) : _data("")
+    SerialString::SerialString(const std::string& data) : _data(data)
     {
 
     }
 
     serialStream SerialString::serialize() const
     {
-            return _data;
+        return _data;
     }
 
     void SerialString::deserialize(const serialStream& stream)

@@ -10,14 +10,42 @@
 #include "Serializable.hpp"
 
 namespace flip {
+    /**
+     * @brief Class representing the payload transmitted in network requests.
+     *
+     * This class inherits from Serializable to enable serialization and transmission over the network.
+     */
     class Payload: public Serializable {
         private:
-            const std::string _routeName;
-            SerializableUint16 _code;
-            serialStream _serialized;
+            std::string _routeName; /**< The name of the route */
+            SerializableUint16 _code; /**< The code associated with the payload */
+            serialStream _serialized; /**< The serialized data */
+
         public:
-            Payload(const std::string &, SerializableUint16, serialStream);
+            /**
+             * @brief Constructor taking serialized data as input.
+             * @param serializedData The serialized data representing the payload.
+             */
+            Payload(const serialStream &serializedData);
+
+            /**
+             * @brief Constructor taking route name, code, and serialized data as inputs.
+             * @param routeName The name of the route.
+             * @param code The code associated with the payload.
+             * @param serializedData The serialized data representing the payload.
+             */
+            Payload(const std::string &routeName, SerializableUint16 code, const serialStream &serializedData);
+
+            /**
+             * @brief Serialize the payload.
+             * @return The serialized data.
+             */
             serialStream serialize(void) const final;
-            void deserialize(const serialStream &) final;
+
+            /**
+             * @brief Deserialize the payload.
+             * @param stream The serialized data representing the payload.
+             */
+            void deserialize(const serialStream &stream) final;
     };
 }

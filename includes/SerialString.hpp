@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** FLIP-LIB
 ** File description:
-** SerialString.hpp
+** SerialSerialString.hpp
 */
 
 #pragma once

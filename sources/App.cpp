@@ -62,8 +62,6 @@ namespace flip {
 
             std::string clientId = ip + ":" + std::to_string(port);
 
-            std::queue<std::string> &clientFIFO = _clientDataMap[clientId].fifo;
-
             std::thread clientThread(&App::handleClient, this, clientSocket, clientAddr);
             clientThread.detach();
         };
