@@ -21,9 +21,9 @@ SRCS = 	sources/App.cpp				\
 		sources/Payload.cpp			\
 		sources/SerialString.cpp	\
 		sources/Client.cpp			\
-		sources/Socket.cpp			\
 		sources/Callback.cpp		\
 		sources/Socket.cpp			\
+		sources/Request.cpp			\
 
 OBJS = $(patsubst sources/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
