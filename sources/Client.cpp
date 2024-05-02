@@ -8,8 +8,9 @@
 #include "Client.hpp"
 
 namespace flip {
-    Client::Client(): _app("", 0)
+    Client::Client(const std::string &ip, const uint16_t &port):
+        _ip(ip), _port(port)
     {
-        
+
     }
 }

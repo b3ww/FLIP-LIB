@@ -23,10 +23,10 @@
  * This macro is used to define a FLIP application with a specified port and name.
  * It also creates an instance of the flip::App class for this application.
  *
- * @param port The port on which the application listens
  * @param appName The name of the application
+ * @param port The port on which the application listens
  */
-#define FLIP_APP(port, appName)                                                     \
+#define FLIP_APP(appName, port)                                                     \
     namespace __FLIP_secured {                                                      \
         namespace appName {                                                         \
             static flip::__FLIP_routeMap __routeMap;                                \

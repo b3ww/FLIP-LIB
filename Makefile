@@ -21,6 +21,7 @@ SRCS = 	sources/App.cpp				\
 		sources/MapPack.cpp			\
 		sources/Payload.cpp			\
 		sources/String.cpp			\
+		sources/Client.cpp			\
 
 OBJS = $(patsubst sources/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 

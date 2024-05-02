@@ -7,13 +7,17 @@
 
 #pragma once
 
-// #include "Flip.hpp"
-// #include "Serializable.hpp"
-// #include <memory>
+#include "Serializable.hpp"
 
-// namespace flip {
-    // class Payload: public Serializable {
-    //     public:
-    //         Payload(const std::string routeName, uint16_t code, std::unique_ptr<Serializable>);
-    // };
-// }
+namespace flip {
+    class Payload: public Serializable {
+        private:
+            const std::string _routeName;
+            SerializableUint16 _code;
+            serialStream _serialized;
+        public:
+            Payload(const std::string &, SerializableUint16, serialStream);
+            serialStream serialize(void) const final;
+            void deserialize(const serialStream &) final;
+    };
+}
