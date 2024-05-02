@@ -32,8 +32,8 @@ namespace flip {
 
         while (true) {
             try {
-                std::shared_ptr<Socket> clientSocketPtr(new Socket(_serverSocket.accept()));
-                std::thread clientThread(&App::handleClient, this, std::shared_ptr<Socket>(clientSocketPtr));
+                Socket clientSocket(_serverSocket.accept());
+                std::thread clientThread(&App::handleClient, this, clientSocket);
                 clientThread.detach();
             } catch (...) {
             }
@@ -58,9 +58,9 @@ namespace flip {
         }
     }
 
-    void App::handleClient(std::shared_ptr<Socket> clientSocketPtr)
+    void App::handleClient(Socket clientSocket)
     {
-        Socket &clientSocket = *clientSocketPtr;
+        // Socket &clientSocket = *clientSocketPtr;
         std::string clientID = clientSocket.getID();
 
         std::cout << "Connection: " << clientID << std::endl;

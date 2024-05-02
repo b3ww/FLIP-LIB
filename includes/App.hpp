@@ -39,7 +39,7 @@ namespace flip {
             sem_t requests;
             std::unordered_map<std::string, ClientData> _clientDataMap;
         public:
-            void handleClient(std::shared_ptr<Socket>);
+            void handleClient(Socket);
             App(uint16_t, const std::string &, const __FLIP_routeMap &);
             ~App(void);
             void run(void);

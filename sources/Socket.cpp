@@ -8,7 +8,7 @@
 #include "Socket.hpp"
 
 namespace flip {
-    Socket::Socket(const std::string& ip, uint16_t port) :
+    Socket::Socket(const std::string &ip, const uint16_t &port) :
         _fd (socket(AF_INET, SOCK_STREAM, 0))
     {
         if (_fd == -1)
@@ -23,7 +23,7 @@ namespace flip {
             throw;
     }
 
-    Socket::Socket(uint16_t port) :
+    Socket::Socket(const uint16_t &port) :
         _fd(socket(AF_INET, SOCK_STREAM, 0))
     {
         if (_fd == -1)
@@ -45,6 +45,14 @@ namespace flip {
         socklen_t len = sizeof(_addr);
 
         _fd = (::accept(acceptFd, reinterpret_cast<sockaddr *>(&_addr), &len));
+        if (_fd < 0)
+            throw;
+    }
+
+    Socket::Socket(const Socket &other) :
+        _fd(dup(other._fd)),
+        _addr(other._addr)
+    {
         if (_fd < 0)
             throw;
     }

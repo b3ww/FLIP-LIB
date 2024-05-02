@@ -18,8 +18,9 @@
 namespace flip {
     class Socket {
         public:
-            Socket(const std::string& ip, uint16_t port);
-            Socket(uint16_t port);
+            Socket(const std::string &ip, const uint16_t &port);
+            Socket(const uint16_t &port);
+            Socket(const Socket& other);
             ~Socket();
 
             Socket accept(void) const;

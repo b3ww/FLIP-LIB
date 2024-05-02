@@ -11,10 +11,10 @@ namespace flip {
     Client::Client(const std::string &ip, const uint16_t &port):
         _ip(ip), _port(port)
     {
-
     }
 
-    int request(const serialStream &)
+    void Client::addToSendRequest(const Request &request)
     {
+        _toSendRequests.push(std::make_pair(Socket(_ip, _port), request));
     }
 }
