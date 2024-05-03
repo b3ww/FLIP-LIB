@@ -26,6 +26,9 @@ namespace flip {
         std::string data(request.getPayload().serialize());
         socket.send(data);
         std::cout << socket.getFd() << std::endl;
-        // socket.receive();
+        std::string response(socket.receive());
+
+        if (!response.size())
+            throw Exception("Socket closed - no request response");
     }
 }

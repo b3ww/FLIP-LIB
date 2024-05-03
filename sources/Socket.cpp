@@ -81,6 +81,7 @@ namespace flip {
         ssize_t nb_bytes = 0;
 
         nb_bytes = recv(_fd, buffer, BUFFER_SIZE - 1, 0);
+        std::cout << nb_bytes;
         if (nb_bytes == -1)
             throw SocketException("Failed to receive data");
         return std::string(buffer, nb_bytes);
