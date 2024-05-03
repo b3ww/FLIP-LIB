@@ -6,7 +6,6 @@
 */
 
 #include "App.hpp"
-#include <iostream>
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -52,7 +51,6 @@ namespace flip {
                 auto& clientFIFO = clientData.fifo;
                 if (!clientFIFO.empty()) {
                     while (!clientFIFO.empty()) {
-                        std::cout << "data: " << clientFIFO.front() << std::endl;
                         route(clientFIFO.front());
                         clientFIFO.pop();
                     }
@@ -65,29 +63,25 @@ namespace flip {
     void App::handleClient(const Socket clientSocket)
     {
         std::string clientID = clientSocket.getID();
-
-        std::cout << "Connection: " << clientID << std::endl;
-
         std::string buffer = clientSocket.receive();
         std::unique_lock<std::mutex> lock(_mutex);
+
         _clientDataMap[clientID].fifo.push(buffer);
         lock.unlock();
         sem_post(&requests);
-
-        std::cout << clientID << " disconnected" << std::endl;
     }
 
     void App::route(const serialStream &serialized)
     {
         Payload payload(serialized);
         std::string routeName(payload.getRouteName());
-            routeName.erase(std::remove_if(routeName.begin(), routeName.end(), [](char c) {
+        routeName.erase(std::remove_if(routeName.begin(), routeName.end(), [](char c) {
             return !isprint(c);
-         }), routeName.end());
+        }), routeName.end());
 
         auto it = _routesMap.find(routeName);
         if (it == _routesMap.end())
-            std::cerr << "not found" << std::endl;
+            throw std::invalid_argument("route not found");
         else
             it->second(payload.getSerialized());
     }
