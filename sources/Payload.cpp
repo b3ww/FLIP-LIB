@@ -22,10 +22,16 @@ namespace flip {
             throw std::invalid_argument("Route name must be <= 64");
     }
 
+    Payload::Payload(const std::string &routeName, uint16_t code, const serialStream &serializedData):
+        _routeName(routeName), _code(code), _serialized(serializedData)
+    {
+        if (routeName.length() > 64)
+            throw std::invalid_argument("Route name must be <= 64");
+    }
+
     serialStream Payload::serialize(void) const
     {
         std::string routeNameCopy = _routeName;
-
         routeNameCopy.resize(64, '\0');
         return routeNameCopy + _code.serialize() + _serialized;
     }

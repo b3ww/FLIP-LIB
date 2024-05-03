@@ -37,6 +37,15 @@ namespace flip {
             Payload(const std::string &routeName, SerializableUint16 code, const serialStream &serializedData);
 
             /**
+             * @brief Constructor taking route name, code, and serialized data as inputs.
+             * @param routeName The name of the route.
+             * @param code The code associated with the payload.
+             * @param serializedData The serialized data representing the payload.
+             */
+            Payload(const std::string &routeName, uint16_t code, const serialStream &serializedData);
+
+
+            /**
              * @brief Serialize the payload.
              * @return The serialized data.
              */

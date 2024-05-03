@@ -36,7 +36,7 @@ namespace flip {
              * @param payload The payload associated with the request.
              * @param callbackManager The callback manager associated with the request.
              */
-            Request(const Payload& payload, CallbackManager& callbackManager);
+            Request(const Payload &payload, const CallbackManager &callbackManager);
 
             /**
              * @brief Gets the payload associated with the request.
@@ -57,6 +57,6 @@ namespace flip {
              *
              * @return const CallbackManager& The callback manager associated with the request.
              */
-            const CallbackManager& getCallback();
+            const CallbackManager& getCallback() const;
     };
 }

@@ -10,24 +10,25 @@
 
 FLIP_APP(app, 4242);
 
-FLIP_ROUTE(app, test, flip::SerialString) {
-    std::cout << pack.getData() << std::endl;
-    // return {FLIP_VALID_RESPONSE_CODE, flip::SerialString("heyll ")}
-}
-
 FLIP_ROUTE(app, say_hello, flip::SerialString)
 {
     std::cout << pack.getData() << std::endl;
+    FLIP_RESPONSE(7, flip::SerialString, "OK");
 }
 
-void print(uint16_t code, const flip::SerializableUint64 &r)
+FLIP_ROUTE(app, backToBack, flip::SerialString)
 {
+    FLIP_RESPONSE(0, flip::SerialString, pack.getData());
+}
 
+FLIP_ROUTE(app, null, flip::SerialEmpty)
+{
+    FLIP_RESPONSE(0, flip::SerialString, "NULL data ok");
 }
 
 int main() {
     try {
-    app.run();
+        app.run();
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }

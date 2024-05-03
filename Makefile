@@ -6,7 +6,7 @@
 ##
 
 
-CXX = g++
+CXX = clang++
 
 CXXFLAGS = -Wall -Wextra -std=c++20 -I./includes
 
@@ -53,4 +53,4 @@ serv:
 	$(CXX) $(CXXFLAGS) main_serv.cpp -L./ -lflip -o serv
 
 cli:
-	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o cli -fsanitize=thread
+	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o cli

@@ -8,7 +8,7 @@
 #include "Request.hpp"
 
 namespace flip {
-    Request::Request(const Payload &payload, CallbackManager &callbackManager):
+    Request::Request(const Payload &payload, const CallbackManager &callbackManager):
         _payload(payload), _callbackManager(callbackManager)
     {
     }
@@ -23,7 +23,7 @@ namespace flip {
         return _payload;
     }
 
-    const CallbackManager &Request::getCallback(void)
+    const CallbackManager &Request::getCallback(void) const
     {
         return _callbackManager;
     }

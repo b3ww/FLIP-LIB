@@ -12,13 +12,14 @@
 #include <thread>
 #include <mutex>
 #include <queue>
+#include "Socket.hpp"
 #include "Payload.hpp"
+#include "Exceptions.hpp"
 
 namespace flip {
     App::App(uint16_t port, const std::string &name, const __FLIP_routeMap &routesMap) :
     _name(name), _routesMap(routesMap), _serverSocket(port)
     {
-        sem_init(&requests, 1, 0);
     }
 
     App::~App()
@@ -27,9 +28,6 @@ namespace flip {
 
     void App::run()
     {
-        std::thread printingThread(&App::requestAnalyser, this);
-        printingThread.detach();
-
         while (true) {
             try {
                 Socket clientSocket(_serverSocket.accept());
@@ -42,47 +40,34 @@ namespace flip {
         };
     }
 
-    void App::requestAnalyser(void)
-    {
-        while (true) {
-            sem_wait(&requests);
-            for (auto& [clientId, clientData] : _clientDataMap) {
-                std::unique_lock<std::mutex> lock(_mutex);
-                auto& clientFIFO = clientData.fifo;
-                if (!clientFIFO.empty()) {
-                    while (!clientFIFO.empty()) {
-                        route(clientFIFO.front());
-                        clientFIFO.pop();
-                    }
-                }
-                lock.unlock();
-            }
-        }
-    }
-
-    void App::handleClient(const Socket clientSocket)
+    void App::handleClient(const Socket &clientSocket)
     {
         std::string clientID = clientSocket.getID();
         std::string buffer = clientSocket.receive();
-        std::unique_lock<std::mutex> lock(_mutex);
 
-        _clientDataMap[clientID].fifo.push(buffer);
-        lock.unlock();
-        sem_post(&requests);
+        route(clientSocket, buffer);
     }
 
-    void App::route(const serialStream &serialized)
+    void App::route(const Socket &socket, const serialStream &serialized)
     {
         Payload payload(serialized);
         std::string routeName(payload.getRouteName());
+        std::pair<uint16_t, serialStream> usefull;
+        std::string nullString(64, '_');
         routeName.erase(std::remove_if(routeName.begin(), routeName.end(), [](char c) {
             return !isprint(c);
         }), routeName.end());
 
         auto it = _routesMap.find(routeName);
-        if (it == _routesMap.end())
-            throw std::invalid_argument("route not found");
-        else
-            it->second(payload.getSerialized());
+        try {
+            if (it == _routesMap.end())
+                throw Exception("route not found");
+            usefull = it->second(payload.getSerialized());
+        } catch (const Exception &e)  {
+            usefull = std::make_pair<uint16_t, serialStream>(42, std::string(e.what()));
+        }
+        SerializableUint16 code(usefull.first);
+        Payload n(nullString, code, usefull.second);
+        socket.send(n.serialize());
     }
 }

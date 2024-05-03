@@ -90,7 +90,7 @@ namespace flip {
                 std::memcpy(&value, ptr, sizeof(T));
             }
 
-            T getValue() const { return value; }
+            const T &getValue() const { return value; }
 
         private:
             T value = T{};
@@ -160,4 +160,24 @@ namespace flip {
      * @brief Alias for a serializable object of type int.
      */
     typedef TypedSerializable<int> SerializableInt;
+
+    /**
+     * @brief Class for an empty serializable type
+     */
+    class SerialEmpty : public Serializable {
+        public:
+            //@brief Default constructor
+            SerialEmpty() = default;
+
+            //@brief Destructor
+            ~SerialEmpty() override = default;
+
+            // @brief Constructor taking any type of argument but constructing nothing
+            template<typename T>
+            SerialEmpty(const T&) {}
+
+            // @brief Do nothing in the serialize and deserialize methods
+            serialStream serialize() const override { return {}; }
+            void deserialize(const serialStream&) override {}
+    };
 }

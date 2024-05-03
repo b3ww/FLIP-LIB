@@ -5,7 +5,6 @@
 ** Flip.hpp
 */
 
-
 #pragma once
 
 #include <functional>
@@ -45,20 +44,20 @@
  * @param packType The type of packet used by the route
  */
 #define FLIP_ROUTE(appName, routeName, packType)                                    \
-    void routeName(const packType &);                                               \
+    flip::__FLIP_routeReturnType routeName(const packType &);                       \
     struct __FLIP_##appName##routeName##_initializer {                              \
         static void initialize() {                                                  \
             __FLIP_secured::appName::__routeMap[#routeName] =                       \
-            [](flip::serialStream __stream) -> void {                               \
+            [](flip::serialStream __stream) -> flip::__FLIP_routeReturnType {       \
                 packType __pack;                                                    \
                 __pack.deserialize(__stream);                                       \
-                routeName(__pack);                                                  \
+                return routeName(__pack);                                           \
             };                                                                      \
         }                                                                           \
         __FLIP_##appName##routeName##_initializer() { initialize(); }               \
     };                                                                              \
     static __FLIP_##appName##routeName##_initializer routeName##_init;              \
-    void routeName(const packType &pack)
+    flip::__FLIP_routeReturnType routeName(const packType &pack[[maybe_unused]])
 
 /**
  * @brief Macro to declare a serializable type.
@@ -80,21 +79,16 @@
     };                                                              \
     static __FLIP_##serializable##_initializer serializable##init;
 
-static inline void flipInit(void)
-{
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableUint8);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableUint16);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableUint32);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableUint64);
+/**
+ * @brief Macro to define a FLIP response
+ *
+ * This macro is used to define a FLIP response with a specified code, response type, and response data.
+ *
+ * @param code The code of the response
+ * @param respType The type of the response
+ * @param respData The data of the response
+ */
+#define FLIP_RESPONSE(code, respType, respData)                             \
+    respType resp(respData);                                                \
+    return std::make_pair<uint16_t, flip::serialStream>(code, resp.serialize());
 
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableInt8);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableInt16);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableInt32);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableInt64);
-
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableChar);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableShort);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableFloat);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableDouble);
-    FLIP_DECLARE_SERIALIZABLE_TEMPLATE(SerializableInt);
-}
