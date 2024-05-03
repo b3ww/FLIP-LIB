@@ -67,7 +67,7 @@ namespace flip {
      * @brief Default callback for route execution errors.
      */
     static __callback<serialStream> __FLIP_default_callback_error_42 = (
-        [](uint16_t [[maybe_unused]], const serialStream &exception) -> void {
+        [](uint16_t _[[maybe_unused]], const serialStream &exception) -> void {
             std::cout << "Route execution terminated by an exception: "
                       << exception << std::endl;
         }
