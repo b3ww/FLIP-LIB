@@ -39,6 +39,11 @@ namespace flip {
             Socket(const uint16_t& port);
 
             /**
+             * @brief Constructor for creating a socket without init netork (_fd=-1)
+             */
+            Socket();
+
+            /**
              * @brief Copy constructor.
              *
              * @param other The socket object to copy from.
@@ -56,6 +61,16 @@ namespace flip {
              * @return Socket A new Socket object representing the accepted connection.
              */
             Socket accept() const;
+
+            /**
+             * @brief Binds the socket to the specified port.
+             *
+             * This function binds the socket to the specified port for listening incoming connections.
+             *
+             * @param port The port to bind the socket to.
+             * @throws SocketException if binding fails.
+             */
+            void bindPort(const uint16_t &port);
 
             /**
              * @brief Sends data over the socket.

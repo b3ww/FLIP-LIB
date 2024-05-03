@@ -53,11 +53,10 @@ namespace flip {
 
             /**
              * @brief Constructs an App object.
-             * @param port The port number to listen on.
              * @param name The name of the application.
              * @param routesMap The map containing route handlers.
              */
-            App(uint16_t port, const std::string &name, const __FLIP_routeMap &routesMap);
+            App(const std::string &name, const __FLIP_routeMap &routesMap);
 
             /**
              * @brief Destroys the App object.
@@ -67,7 +66,7 @@ namespace flip {
             /**
              * @brief Runs the application.
              */
-            void run(void);
+            void run(uint16_t port);
 
             /**
              * @brief Overloaded subscript operator to access route handlers.

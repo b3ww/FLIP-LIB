@@ -17,8 +17,8 @@
 #include "Exceptions.hpp"
 
 namespace flip {
-    App::App(uint16_t port, const std::string &name, const __FLIP_routeMap &routesMap) :
-    _name(name), _routesMap(routesMap), _serverSocket(port)
+    App::App(const std::string &name, const __FLIP_routeMap &routesMap) :
+    _name(name), _routesMap(routesMap)
     {
     }
 
@@ -26,8 +26,9 @@ namespace flip {
     {
     }
 
-    void App::run()
+    void App::run(uint16_t port)
     {
+        _serverSocket.bindPort(port);
         while (true) {
             try {
                 Socket clientSocket(_serverSocket.accept());

@@ -25,13 +25,13 @@
  * @param appName The name of the application
  * @param port The port on which the application listens
  */
-#define FLIP_APP(appName, port)                                                     \
+#define FLIP_APP(appName)                                                           \
     namespace __FLIP_secured {                                                      \
         namespace appName {                                                         \
             static flip::__FLIP_routeMap __routeMap;                                \
         }                                                                           \
     }                                                                               \
-    static flip::App appName(port, #appName, __FLIP_secured::appName::__routeMap);
+    static flip::App appName(#appName, __FLIP_secured::appName::__routeMap);
 
 /**
  * @brief Macro to define a FLIP route

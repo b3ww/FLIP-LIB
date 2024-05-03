@@ -8,7 +8,7 @@
 #include "SerialString.hpp"
 #include "Client.hpp"
 
-FLIP_APP(app, 4242);
+FLIP_APP(app);
 
 FLIP_ROUTE(app, say_hello, flip::SerialString)
 {
@@ -26,9 +26,9 @@ FLIP_ROUTE(app, null, flip::SerialEmpty)
     FLIP_RESPONSE(0, flip::SerialString, "NULL data ok");
 }
 
-int main() {
+int main(int ac, char **av) {
     try {
-        app.run();
+        app.run(4242);
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }

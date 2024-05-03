@@ -24,8 +24,7 @@ namespace flip {
             throw SocketException("Failed to connect socket");
     }
 
-    Socket::Socket(const uint16_t &port) :
-        _fd(socket(AF_INET, SOCK_STREAM, 0))
+    void Socket::bindPort(const uint16_t &port)
     {
         if (_fd == -1)
             throw SocketException("Failed to create socket");
@@ -39,6 +38,12 @@ namespace flip {
 
         if (listen(_fd, SOMAXCONN) == -1)
             throw SocketException("Failed to listen on socket");
+    }
+
+    Socket::Socket(const uint16_t &port) :
+        _fd(socket(AF_INET, SOCK_STREAM, 0))
+    {
+        bindPort(port);
     }
 
     Socket::Socket(int acceptFd)
@@ -56,6 +61,12 @@ namespace flip {
     {
         if (_fd < 0)
             throw SocketException("Failed to duplicate socket descriptor");
+    }
+
+    Socket::Socket() :
+        _fd (socket(AF_INET, SOCK_STREAM, 0))
+    {
+
     }
 
     Socket::~Socket()
