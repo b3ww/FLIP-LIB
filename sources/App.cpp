@@ -13,6 +13,7 @@
 #include <thread>
 #include <mutex>
 #include <queue>
+#include "Payload.hpp"
 
 namespace flip {
     App::App(uint16_t port, const std::string &name, const __FLIP_routeMap &routesMap) :
@@ -33,7 +34,9 @@ namespace flip {
         while (true) {
             try {
                 Socket clientSocket(_serverSocket.accept());
-                std::thread clientThread(&App::handleClient, this, clientSocket);
+                std::thread clientThread([this, clientSocket](){
+                    handleClient(clientSocket);
+                });
                 clientThread.detach();
             } catch (...) {
             }
@@ -49,7 +52,8 @@ namespace flip {
                 auto& clientFIFO = clientData.fifo;
                 if (!clientFIFO.empty()) {
                     while (!clientFIFO.empty()) {
-                        std::cout << clientFIFO.front() << std::endl;
+                        std::cout << "data: " << clientFIFO.front() << std::endl;
+                        route(clientFIFO.front());
                         clientFIFO.pop();
                     }
                 }
@@ -71,5 +75,20 @@ namespace flip {
         sem_post(&requests);
 
         std::cout << clientID << " disconnected" << std::endl;
+    }
+
+    void App::route(const serialStream &serialized)
+    {
+        Payload payload(serialized);
+        std::string routeName(payload.getRouteName());
+            routeName.erase(std::remove_if(routeName.begin(), routeName.end(), [](char c) {
+            return !isprint(c);
+         }), routeName.end());
+
+        auto it = _routesMap.find(routeName);
+        if (it == _routesMap.end())
+            std::cerr << "not found" << std::endl;
+        else
+            it->second(payload.getSerialized());
     }
 }

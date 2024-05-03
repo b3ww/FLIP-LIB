@@ -6,6 +6,7 @@
 */
 
 #include "Socket.hpp"
+#include <iostream>
 
 namespace flip {
     Socket::Socket(const std::string &ip, const uint16_t &port) :
@@ -70,6 +71,7 @@ namespace flip {
 
     void Socket::send(const std::string& data) const
     {
+        std::cout << data << std::endl;
         if (::send(_fd, data.c_str(), data.size(), 0) == -1)
             throw;
     }
@@ -79,8 +81,7 @@ namespace flip {
         char buffer[BUFFER_SIZE];
         ssize_t nb_bytes = 0;
 
-        for (int nb = recv(_fd, buffer, BUFFER_SIZE - 1, 0); nb == BUFFER_SIZE - 1; nb_bytes += nb)
-            nb = recv(_fd, buffer, BUFFER_SIZE - 1, 0);
+        nb_bytes = recv(_fd, buffer, BUFFER_SIZE - 1, 0);
         if (nb_bytes == -1)
             throw;
         return std::string(buffer, nb_bytes);

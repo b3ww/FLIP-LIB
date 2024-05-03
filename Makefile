@@ -48,8 +48,8 @@ fclean: clean
 
 re: fclean all
 
-test_serv:
-	$(CXX) $(CXXFLAGS) main_serv.cpp -L./ -lflip -o test
+serv:
+	$(CXX) $(CXXFLAGS) main_serv.cpp -L./ -lflip -o serv
 
-test_cli:
-	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o test
+cli:
+	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o cli

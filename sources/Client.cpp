@@ -6,6 +6,7 @@
 */
 
 #include "Client.hpp"
+#include <iostream>
 
 namespace flip {
     Client::Client(const std::string &ip, const uint16_t &port):
@@ -16,18 +17,18 @@ namespace flip {
 
     void Client::newRequest(const Request &request)
     {
-        std::thread requestThread(&handleRequest, this, request);
-        requestThread.detach();
+        // std::thread requestThread(&Client::handleRequest, this, request);
+        // requestThread.detach();
+        handleRequest(request);
     }
+
 
     void Client::handleRequest(const Request &request)
     {
-        sem_post(&_pendingRequests);
         Socket socket(_ip, _port);
-        std::string data(request.getPayload().serialize().data());
-
+        std::string data(request.getPayload().serialize());
         socket.send(data);
-
-        sem_wait(&_pendingRequests);
+        std::cout << socket.getFd() << std::endl;
+        // socket.receive();
     }
 }

@@ -45,5 +45,6 @@ namespace flip {
             void run(void);
             const __FLIP_route &operator [](const std::string &);
             void requestAnalyser(void);
+            void route(const serialStream &);
     };
 }

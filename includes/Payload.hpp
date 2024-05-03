@@ -47,5 +47,9 @@ namespace flip {
              * @param stream The serialized data representing the payload.
              */
             void deserialize(const serialStream &stream) final;
+
+            const std::string &getRouteName(void) const {return _routeName;}
+            const uint16_t &getCode(void) const {return _code.getValue();}
+            const serialStream &getSerialized(void) const {return _serialized;}
     };
 }
