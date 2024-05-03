@@ -8,7 +8,7 @@
 #include "SerialString.hpp"
 #include "Client.hpp"
 
-FLIP_APP(app, -1);
+FLIP_APP(app, 4242);
 
 FLIP_ROUTE(app, test, flip::SerialString) {
     std::cout << pack.getData() << std::endl;
@@ -26,6 +26,10 @@ void print(uint16_t code, const flip::SerializableUint64 &r)
 }
 
 int main() {
+    try {
     app.run();
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+    }
     return 0;
 }

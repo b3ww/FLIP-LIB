@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2023
 ** FLIP-LIB
 ** File description:
-** Srting.cpp
+** SerialString.cpp
 */
 
 #include "SerialString.hpp"

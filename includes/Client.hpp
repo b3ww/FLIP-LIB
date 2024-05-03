@@ -12,11 +12,13 @@
 #include <thread>
 #include <semaphore.h>
 #include <queue>
+#include <iostream>
 
 #include "Serializable.hpp"
 #include "Payload.hpp"
 #include "Socket.hpp"
 #include "Request.hpp"
+#include "ThreadManager.hpp"
 
 namespace flip {
     class Client {
@@ -30,15 +32,10 @@ namespace flip {
             std::string _ip;
             uint16_t _port;
 
-            sem_t _pendingRequests;
-
-
-            std::queue<std::pair<Socket, Request>> _toSendRequests;
-            // std::queue<std::pair<Socket, Request>> _pendingRequests;
-            std::queue<Request> _callbackRequests;
+            ThreadManager _thManager;
     };
 
-    void operator>>(const Request &request, Client client)
+    void operator>>(const Request &request, Client &client)
     {
         client.newRequest(request);
     }

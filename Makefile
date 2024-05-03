@@ -24,6 +24,7 @@ SRCS = 	sources/App.cpp				\
 		sources/Callback.cpp		\
 		sources/Socket.cpp			\
 		sources/Request.cpp			\
+		sources/ThreadManager.cpp	\
 
 OBJS = $(patsubst sources/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
@@ -52,4 +53,4 @@ serv:
 	$(CXX) $(CXXFLAGS) main_serv.cpp -L./ -lflip -o serv
 
 cli:
-	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o cli
+	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o cli -fsanitize=thread
