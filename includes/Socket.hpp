@@ -85,6 +85,13 @@ namespace flip {
              */
             std::string getID() const { return std::string(std::string(inet_ntoa(_addr.sin_addr)) + ':' + std::to_string(ntohs(_addr.sin_port))); }
 
+            /**
+             * @brief Gets the port associated with the socket.
+             *
+             * @return uint16_t The port associated with the socket.
+             */
+            uint16_t getPort() const { return ntohs(_addr.sin_port); }
+
         private:
             int _fd; ///< File descriptor associated with the socket.
             sockaddr_in _addr; ///< Address information associated with the socket.
