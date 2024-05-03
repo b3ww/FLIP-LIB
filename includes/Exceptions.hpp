@@ -24,7 +24,7 @@ namespace flip {
              *
              * @param message The error message associated with this exception.
              */
-            Exception(const std::string& message) : _message(message) {}
+            Exception(const std::string& message) : _message("flipError: " + message) {}
 
             /**
              * @brief Get the error message associated with this exception.
@@ -37,5 +37,69 @@ namespace flip {
 
         private:
             std::string _message; ///< The error message associated with this exception.
+    };
+
+    /**
+     * @brief Exception class for application-related errors.
+     */
+    class AppException : public Exception {
+        public:
+            AppException(const std::string& message) : Exception("AppException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for callback-related errors.
+     */
+    class CallbackException : public Exception {
+        public:
+            CallbackException(const std::string& message) : Exception("CallbackException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for client-related errors.
+     */
+    class ClientException : public Exception {
+        public:
+            ClientException(const std::string& message) : Exception("ClientException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for payload-related errors.
+     */
+    class PayloadException : public Exception {
+        public:
+            PayloadException(const std::string& message) : Exception("PayloadException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for request-related errors.
+     */
+    class RequestException : public Exception {
+        public:
+            RequestException(const std::string& message) : Exception("RequestException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for serializable-related errors.
+     */
+    class SerializableException : public Exception {
+        public:
+            SerializableException(const std::string& message) : Exception("SerializableException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for serial string-related errors.
+     */
+    class SerialStringException : public Exception {
+        public:
+            SerialStringException(const std::string& message) : Exception("SerialStringException: " + message) {}
+    };
+
+    /**
+     * @brief Exception class for socket-related errors.
+     */
+    class SocketException : public Exception {
+        public:
+            SocketException(const std::string& message) : Exception("SocketException: " + message) {}
     };
 }

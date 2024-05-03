@@ -10,7 +10,6 @@
 namespace flip {
     SerialString::SerialString(const std::string& data) : _data(data)
     {
-
     }
 
     serialStream SerialString::serialize() const

@@ -4,7 +4,6 @@
 #include <string>
 #include "Flip.hpp"
 #include "Serializable.hpp"
-#include "MapPack.hpp"
 #include "Flip.hpp"
 #include "SerialString.hpp"
 #include "Client.hpp"

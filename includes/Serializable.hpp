@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <memory>
 #include <functional>
+#include "Exceptions.hpp"
 
 
 namespace flip {
@@ -83,7 +84,7 @@ namespace flip {
             void deserialize(const serialStream& stream) override
             {
                 if (stream.size() != sizeof(T)) {
-                    throw std::invalid_argument("Invalid serial stream size");
+                    throw SerializableException("Invalid serial stream size");
                 }
                 const uint8_t* ptr = reinterpret_cast<const uint8_t*>(stream.data());
                 std::memcpy(&value, ptr, sizeof(T));

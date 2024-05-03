@@ -4,15 +4,15 @@
 #include <string>
 #include "Flip.hpp"
 #include "Serializable.hpp"
-#include "MapPack.hpp"
 #include "Flip.hpp"
 #include "SerialString.hpp"
 #include "Client.hpp"
 
-FLIP_APP(app, 4242);
+FLIP_APP(app, -1);
 
 FLIP_ROUTE(app, test, flip::SerialString) {
     std::cout << pack.getData() << std::endl;
+    // return {FLIP_VALID_RESPONSE_CODE, flip::SerialString("heyll ")}
 }
 
 FLIP_ROUTE(app, say_hello, flip::SerialString)

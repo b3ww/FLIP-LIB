@@ -45,11 +45,11 @@
  * @param packType The type of packet used by the route
  */
 #define FLIP_ROUTE(appName, routeName, packType)                                    \
-    void routeName(const packType &);                                               \
+    std::pair<uint16_t, serialStream> routeName(const packType &);                  \
     struct __FLIP_##appName##routeName##_initializer {                              \
         static void initialize() {                                                  \
             __FLIP_secured::appName::__routeMap[#routeName] =                       \
-            [](flip::serialStream __stream) -> void {                               \
+            [](flip::serialStream __stream) -> std::pair<uint16_t, serialStream> {  \
                 packType __pack;                                                    \
                 __pack.deserialize(__stream);                                       \
                 routeName(__pack);                                                  \
@@ -58,7 +58,7 @@
         __FLIP_##appName##routeName##_initializer() { initialize(); }               \
     };                                                                              \
     static __FLIP_##appName##routeName##_initializer routeName##_init;              \
-    void routeName(const packType &pack)
+    std::pair<uint16_t, serialStream> routeName(const packType &pack)
 
 /**
  * @brief Macro to declare a serializable type.
