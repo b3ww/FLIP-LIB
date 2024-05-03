@@ -12,15 +12,51 @@
 #include "Callback.hpp"
 
 namespace flip {
+    /**
+     * @brief Request class representing a network request.
+     *
+     * This class represents a network request, encapsulating a payload and a callback manager.
+     */
     class Request {
         private:
-            const Payload _payload;
-            CallbackManager _callbackManager;
+            const Payload _payload; ///< The payload associated with the request.
+            CallbackManager _callbackManager; ///< The callback manager associated with the request.
+
         public:
+            /**
+             * @brief Deleted default constructor.
+             *
+             * This constructor is deleted to prevent instantiation of Request without payload and callback manager.
+             */
             Request() = delete;
-            Request(const Payload &, CallbackManager &);
-            const Payload &getPayload(void);
-            const Payload getPayload(void) const;
-            const CallbackManager &getCallback(void);
+
+            /**
+             * @brief Constructor for creating a Request with a specified payload and callback manager.
+             *
+             * @param payload The payload associated with the request.
+             * @param callbackManager The callback manager associated with the request.
+             */
+            Request(const Payload& payload, CallbackManager& callbackManager);
+
+            /**
+             * @brief Gets the payload associated with the request.
+             *
+             * @return const Payload& The payload associated with the request.
+             */
+            const Payload& getPayload();
+
+            /**
+             * @brief Gets the payload associated with the request (const version).
+             *
+             * @return const Payload The payload associated with the request.
+             */
+            const Payload getPayload() const;
+
+            /**
+             * @brief Gets the callback manager associated with the request.
+             *
+             * @return const CallbackManager& The callback manager associated with the request.
+             */
+            const CallbackManager& getCallback();
     };
 }
