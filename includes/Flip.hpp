@@ -15,6 +15,7 @@
 #include <vector>
 #include "App.hpp"
 #include "Serializable.hpp"
+#include "Logger.hpp"
 
 /**
  * @brief Macro to define a FLIP application
@@ -92,3 +93,4 @@
     respType resp(respData);                                                \
     return std::make_pair<uint16_t, flip::serialStream>(code, resp.serialize());
 
+#define FLIP_LOG(logLevel) flip::__FLIP_LOGER(logLevel)

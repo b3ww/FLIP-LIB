@@ -6,7 +6,7 @@
 ##
 
 
-CXX = clang++
+CXX = g++
 
 CXXFLAGS = -Wall -Wextra -std=c++20 -I./includes
 
@@ -25,12 +25,11 @@ SRCS = 	sources/App.cpp				\
 		sources/Socket.cpp			\
 		sources/Request.cpp			\
 		sources/ThreadManager.cpp	\
+		sources/Logger.cpp			\
 
 OBJS = $(patsubst sources/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
-
 all: $(LIB_NAME)
-
 
 $(LIB_NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared -o lib$(LIB_NAME).so $(OBJS)
@@ -48,9 +47,3 @@ fclean: clean
 	rm -rf lib$(LIB_NAME).so
 
 re: fclean all
-
-serv:
-	$(CXX) $(CXXFLAGS) main_serv.cpp -L./ -lflip -o serv
-
-cli:
-	$(CXX) $(CXXFLAGS) main_cli.cpp -L./ -lflip -o cli
