@@ -9,42 +9,63 @@
 
 namespace flip {
     ThreadManager::ThreadManager() :
+        _newThread(0),
         _manager(&ThreadManager::managerRoutine, this)
     {
-        sem_init(&_newThread, 0, 0);
     }
 
     ThreadManager::~ThreadManager()
     {
+        waitThreads();
         _running = false;
-        sem_post(&_newThread);
+        _newThread.release();
         if (_manager.joinable()) {
             _manager.join();
         }
-        for (auto &thread : _threads) {
-            thread.join();
+    }
+
+    void ThreadManager::deleteThread()
+    {
+        _mutex.lock();
+        for (auto it = _threads.begin(); it != _threads.end(); it++) {
+            auto &thread = *it;
+            if (thread.joinable()) {
+                thread.join();
+                _threads.erase(it);
+                _mutex.unlock();
+                _newThread.acquire();
+                return;
+            }
         }
-        sem_destroy(&_newThread);
+        _mutex.unlock();
     }
 
     void ThreadManager::managerRoutine()
     {
-        sem_wait(&_newThread);
+        _newThread.acquire();
         while (_running) {
-            for (auto it = _threads.begin(); it != _threads.end(); it++) {
-                auto &thread = *it;
-                if (thread.get_id() == std::thread::id()) {
-                    thread.join();
-                    sem_wait(&_newThread);
-                    break;
-                }
-            }
+            deleteThread();
         }
     }
 
     void ThreadManager::newThread(std::thread &thread)
     {
+        _mutex.lock();
         _threads.push_back(std::move(thread));
-        sem_post(&_newThread);
+        _mutex.unlock();
+        _newThread.release();
+    }
+
+    size_t ThreadManager::getNbThreads(void)
+    {
+        _mutex.lock();
+        size_t nb = _threads.size();
+        _mutex.unlock();
+        return nb;
+    }
+
+    void ThreadManager::waitThreads(size_t cap)
+    {
+        while (getNbThreads() > cap) {}
     }
 }

@@ -18,10 +18,12 @@ namespace flip {
     class Payload: public Serializable {
         private:
             std::string _routeName; /**< The name of the route */
-            SerializableUint16 _code; /**< The code associated with the payload */
+            SerialUint16 _code; /**< The code associated with the payload */
             serialStream _serialized; /**< The serialized data */
 
         public:
+            Payload() = default;
+
             /**
              * @brief Constructor taking serialized data as input.
              * @param serializedData The serialized data representing the payload.
@@ -34,7 +36,7 @@ namespace flip {
              * @param code The code associated with the payload.
              * @param serializedData The serialized data representing the payload.
              */
-            Payload(const std::string &routeName, SerializableUint16 code, const serialStream &serializedData);
+            Payload(const std::string &routeName, SerialUint16 code, const serialStream &serializedData);
 
             /**
              * @brief Constructor taking route name, code, and serialized data as inputs.

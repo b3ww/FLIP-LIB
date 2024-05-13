@@ -25,11 +25,12 @@ SRCS = 	sources/App.cpp				\
 		sources/Socket.cpp			\
 		sources/Request.cpp			\
 		sources/ThreadManager.cpp	\
-		sources/Logger.cpp			\
+		sources/Logger.cpp
 
 OBJS = $(patsubst sources/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
 all: $(LIB_NAME)
+	cp lib$(LIB_NAME).so ../
 
 $(LIB_NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared -o lib$(LIB_NAME).so $(OBJS)

@@ -15,7 +15,7 @@ namespace flip {
         deserialize(serialized);
     }
 
-    Payload::Payload(const std::string &routeName, SerializableUint16 code, const serialStream &serialized):
+    Payload::Payload(const std::string &routeName, SerialUint16 code, const serialStream &serialized):
         _routeName(routeName), _code(code), _serialized(serialized)
     {
         if (routeName.length() > 64)
@@ -38,6 +38,9 @@ namespace flip {
 
     void Payload::deserialize(const serialStream &serializable)
     {
+        if (serializable.size() < 64)
+            throw flip::PayloadException("Serializable canno't be convert to payload\
+                abort request");
         _routeName = serializable.substr(0, 64);
         _code.deserialize(serializable.substr(64, 2));
         _serialized = serializable.substr(66);

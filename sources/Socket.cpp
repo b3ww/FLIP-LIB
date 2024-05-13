@@ -10,7 +10,7 @@
 
 namespace flip {
     Socket::Socket(const std::string &ip, const uint16_t &port) :
-        _fd (socket(AF_INET, SOCK_STREAM, 0))
+        _fd(socket(AF_INET, SOCK_STREAM, 0))
     {
         if (_fd == -1)
             throw SocketException("Failed to create socket");
@@ -38,6 +38,10 @@ namespace flip {
 
         if (listen(_fd, SOMAXCONN) == -1)
             throw SocketException("Failed to listen on socket");
+        if (!port) {
+            socklen_t len = sizeof(_addr);
+            getsockname(_fd, (struct sockaddr *) &_addr, &len);
+        }
     }
 
     Socket::Socket(const uint16_t &port) :
@@ -92,8 +96,10 @@ namespace flip {
         ssize_t nb_bytes = 0;
 
         nb_bytes = recv(_fd, buffer, BUFFER_SIZE - 1, 0);
-        if (nb_bytes == -1)
+        if (nb_bytes == -1) {
+            perror(NULL);
             throw SocketException("Failed to receive data");
+        }
         return std::string(buffer, nb_bytes);
     }
 }

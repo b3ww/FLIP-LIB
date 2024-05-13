@@ -15,7 +15,6 @@
 namespace flip {
 
     enum class LogLevel {
-        NONE,
         INFO,
         WARNING,
         ERROR,
@@ -24,11 +23,13 @@ namespace flip {
 
     class Logger {
         private:
+            const std::string _name;
             std::unordered_map<LogLevel, std::ostream *> _streams;
+            std::string fomrmatLogLevel(const LogLevel &) const;
 
         public:
-            Logger();
-            std::ostream &operator()(LogLevel level);
-            void setup(const LogLevel &key, std::ostream &stream);
+            Logger(const std::string &);
+            std::ostream &operator()(LogLevel);
+            void setup(const LogLevel &, std::ostream &);
     };
 }

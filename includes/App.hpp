@@ -18,6 +18,7 @@
 
 #include "Serializable.hpp"
 #include "Socket.hpp"
+#include "Logger.hpp"
 
 namespace flip {
     /**
@@ -28,7 +29,7 @@ namespace flip {
     /**
      * @brief Alias for the route function signature.
      */
-    typedef std::function<__FLIP_routeReturnType(flip::serialStream __stream)> __FLIP_route;
+    typedef std::function<__FLIP_routeReturnType(flip::serialStream, const std::string &)> __FLIP_route;
 
     /**
      * @brief Alias for the map containing route handlers.
@@ -43,6 +44,7 @@ namespace flip {
             const std::string &_name; ///< The name of the application.
             const __FLIP_routeMap &_routesMap; ///< The map containing route handlers.
             Socket _serverSocket; ///< The server socket.
+            Logger _logger; ///< The app logger.
 
         public:
             /**
@@ -79,7 +81,8 @@ namespace flip {
              * @brief Routes a request to the appropriate handler.
              * @param socket The client socket.
              * @param serialized The serialized request data.
+             * @param clientId [ip]:[port] of client which request.
              */
-            void route(const Socket &socket, const serialStream &serialized);
+            void route(const Socket &socket, const serialStream &serialized, const std::string &clientID);
     };
 }

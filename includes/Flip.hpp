@@ -15,7 +15,17 @@
 #include <vector>
 #include "App.hpp"
 #include "Serializable.hpp"
+#include "Exceptions.hpp"
 #include "Logger.hpp"
+#include "Request.hpp"
+#include "SerialString.hpp"
+#include "Socket.hpp"
+#include "Callback.hpp"
+#include "ThreadManager.hpp"
+#include "Client.hpp"
+#include "Payload.hpp"
+#include "Request.hpp"
+#include "SerialVector.hpp"
 
 /**
  * @brief Macro to define a FLIP application
@@ -45,20 +55,21 @@
  * @param packType The type of packet used by the route
  */
 #define FLIP_ROUTE(appName, routeName, packType)                                    \
-    flip::__FLIP_routeReturnType routeName(const packType &);                       \
+    flip::__FLIP_routeReturnType routeName(const packType &, const std::string &);  \
     struct __FLIP_##appName##routeName##_initializer {                              \
         static void initialize() {                                                  \
             __FLIP_secured::appName::__routeMap[#routeName] =                       \
-            [](flip::serialStream __stream) -> flip::__FLIP_routeReturnType {       \
+            [](flip::serialStream __stream, const std::string &__meta) -> flip::__FLIP_routeReturnType {       \
                 packType __pack;                                                    \
                 __pack.deserialize(__stream);                                       \
-                return routeName(__pack);                                           \
+                return routeName(__pack, __meta);                                           \
             };                                                                      \
         }                                                                           \
         __FLIP_##appName##routeName##_initializer() { initialize(); }               \
     };                                                                              \
     static __FLIP_##appName##routeName##_initializer routeName##_init;              \
-    flip::__FLIP_routeReturnType routeName(const packType &pack[[maybe_unused]])
+    flip::__FLIP_routeReturnType routeName(const packType &pack[[maybe_unused]],    \
+        const std::string &meta[[maybe_unused]])
 
 /**
  * @brief Macro to declare a serializable type.

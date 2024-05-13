@@ -4,6 +4,7 @@
 ** File description:
 ** Ipack.hpp
 */
+
 #pragma once
 
 #include <cstring>
@@ -99,67 +100,67 @@ namespace flip {
     /**
      * @brief Alias for a serializable object of type uint8_t.
      */
-    typedef TypedSerializable<uint8_t> SerializableUint8;
+    typedef TypedSerializable<uint8_t> SerialUint8;
 
     /**
      * @brief Alias for a serializable object of type uint16_t.
      */
-    typedef TypedSerializable<uint16_t> SerializableUint16;
+    typedef TypedSerializable<uint16_t> SerialUint16;
 
     /**
      * @brief Alias for a serializable object of type uint32_t.
      */
-    typedef TypedSerializable<uint32_t> SerializableUint32;
+    typedef TypedSerializable<uint32_t> SerialUint32;
 
     /**
      * @brief Alias for a serializable object of type uint64_t.
      */
-    typedef TypedSerializable<uint64_t> SerializableUint64;
+    typedef TypedSerializable<uint64_t> SerialUint64;
 
     /**
      * @brief Alias for a serializable object of type int8_t.
      */
-    typedef TypedSerializable<int8_t> SerializableInt8;
+    typedef TypedSerializable<int8_t> SerialInt8;
 
     /**
      * @brief Alias for a serializable object of type int16_t.
      */
-    typedef TypedSerializable<int16_t> SerializableInt16;
+    typedef TypedSerializable<int16_t> SerialInt16;
 
     /**
      * @brief Alias for a serializable object of type int32_t.
      */
-    typedef TypedSerializable<int32_t> SerializableInt32;
+    typedef TypedSerializable<int32_t> SerialInt32;
 
     /**
      * @brief Alias for a serializable object of type int64_t.
      */
-    typedef TypedSerializable<int64_t> SerializableInt64;
+    typedef TypedSerializable<int64_t> SerialInt64;
 
     /**
      * @brief Alias for a serializable object of type char.
      */
-    typedef TypedSerializable<char> SerializableChar;
+    typedef TypedSerializable<char> SerialChar;
 
     /**
      * @brief Alias for a serializable object of type short.
      */
-    typedef TypedSerializable<short> SerializableShort;
+    typedef TypedSerializable<short> SerialCharShort;
 
     /**
      * @brief Alias for a serializable object of type float.
      */
-    typedef TypedSerializable<float> SerializableFloat;
+    typedef TypedSerializable<float> SerialCharFloat;
 
     /**
      * @brief Alias for a serializable object of type double.
      */
-    typedef TypedSerializable<double> SerializableDouble;
+    typedef TypedSerializable<double> SerialCharDouble;
 
     /**
      * @brief Alias for a serializable object of type int.
      */
-    typedef TypedSerializable<int> SerializableInt;
+    typedef TypedSerializable<int> SerialInt;
 
     /**
      * @brief Class for an empty serializable type

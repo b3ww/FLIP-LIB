@@ -18,7 +18,7 @@
 
 namespace flip {
     App::App(const std::string &name, const __FLIP_routeMap &routesMap) :
-    _name(name), _routesMap(routesMap)
+    _name(name), _routesMap(routesMap), _logger("App {" + name + "}")
     {
     }
 
@@ -29,6 +29,10 @@ namespace flip {
     void App::run(uint16_t port)
     {
         _serverSocket.bindPort(port);
+        _logger(LogLevel::INFO) << "Application si Sarting" << std::endl;
+        for (const auto &pair: _routesMap) {
+            _logger(LogLevel::DEBUG) << "find route -> [" << pair.first << "]" << std::endl;
+        }
         while (true) {
             try {
                 Socket clientSocket(_serverSocket.accept());
@@ -46,12 +50,19 @@ namespace flip {
         std::string clientID = clientSocket.getID();
         std::string buffer = clientSocket.receive();
 
-        route(clientSocket, buffer);
+        route(clientSocket, buffer, clientID);
     }
 
-    void App::route(const Socket &socket, const serialStream &serialized)
+    void App::route(const Socket &socket, const serialStream &serialized, const std::string &clientID)
     {
-        Payload payload(serialized);
+        Payload payload;
+
+        try {
+            payload.deserialize(serialized);
+        } catch (const Exception &e) {
+            _logger(LogLevel::WARNING) << clientID << " failed to deserialize payload ->" << e.what() << std::endl;
+            return;
+        }
         std::string routeName(payload.getRouteName());
         std::pair<uint16_t, serialStream> usefull;
         std::string nullString(64, '_');
@@ -59,15 +70,17 @@ namespace flip {
             return !isprint(c);
         }), routeName.end());
 
+        _logger(LogLevel::INFO) << clientID << " request route [" << routeName << "]" << std::endl;
         auto it = _routesMap.find(routeName);
         try {
             if (it == _routesMap.end())
                 throw Exception("route not found");
-            usefull = it->second(payload.getSerialized());
+            usefull = it->second(payload.getSerialized(), socket.getID());
         } catch (const Exception &e)  {
+            _logger(LogLevel::WARNING) << clientID << " route excetion -> " << e.what() << std::endl;
             usefull = std::make_pair<uint16_t, serialStream>(42, std::string(e.what()));
         }
-        SerializableUint16 code(usefull.first);
+        SerialUint16 code(usefull.first);
         Payload n(nullString, code, usefull.second);
         socket.send(n.serialize());
     }
