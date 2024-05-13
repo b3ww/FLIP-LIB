@@ -9,11 +9,13 @@ FLIP-LIB is a C++ library that provides a simple way to create network applicati
     1. [Creating an Application](#creating-an-application)
     2. [Defining Routes](#defining-routes)
     3. [Serializable Types](#serializable-types)
+        1. [Pre-implemented Types](#pre-implemented-types)
+        2. [Custom Serializable Types](#custom-serializable-types)
     4. [Client](#client)
-    5. [Logging](#logging)
+    5. [Callback Manager](#callback-manager)
+    6. [Logging](#logging)
 3. [Examples](#examples)
-4. [API Reference](#api-reference)
-5. [License](#license)
+4. [License](#license)
 
 ## Installation
 
@@ -57,7 +59,27 @@ The `FLIP_RESPONSE` macro is used to create a response for the route. It takes t
 
 ### Serializable Types
 
-FLIP-LIB provides several built-in serializable types, such as `SerialString`, `SerialUint16`, and `SerialVector`. You can also create your own serializable types by inheriting from the `Serializable` class and implementing the `serialize` and `deserialize` methods.
+#### Pre-implemented Types
+
+FLIP-LIB provides several built-in serializable types, such as `SerialString`, `SerialUint8`, `SerialUint16`, `SerialUint32`, `SerialUint64`, `SerialInt8`, `SerialInt16`, `SerialInt32`, `SerialInt64`, `SerialChar`, `SerialCharShort`, `SerialCharFloat`, `SerialCharDouble`, `SerialInt`, and `SerialVector`. These types can be used directly in your routes without any additional setup.
+
+```cpp
+FLIP_ROUTE(MyApp, echo, SerialString) {
+    FLIP_RESPONSE(200, SerialString, pack.getData());
+}
+
+FLIP_ROUTE(MyApp, add, SerialVector<SerialUint32>) {
+    SerialUint32 result = 0;
+    for (const auto& num : pack.getData()) {
+        result += num;
+    }
+    FLIP_RESPONSE(200, SerialUint32, result);
+}
+```
+
+#### Custom Serializable Types
+
+You can also create your own serializable types by inheriting from the `Serializable` class and implementing the `serialize` and `deserialize` methods.
 
 ```cpp
 class MySerializable : public Serializable {
@@ -101,6 +123,25 @@ client.request<SerialString>("exampleRoute", "Hello, server!", [](uint16_t code,
 });
 ```
 
+### Callback Manager
+
+The `CallbackManager` class allows you to manage multiple callbacks for different status codes. You can create a `CallbackManager` instance and pass it to the `Client::request` method.
+
+```cpp
+CallbackManager callbackManager({
+    {200, [](uint16_t code, const serialStream& data) {
+        SerialString response;
+        response.deserialize(data);
+        std::cout << "Received response: " << response.getData() << std::endl;
+    }},
+    {404, [](uint16_t code, const serialStream& data) {
+        std::cout << "Route not found" << std::endl;
+    }}
+});
+
+client.request<SerialString>("exampleRoute", "Hello, server!", callbackManager);
+```
+
 ### Logging
 
 FLIP-LIB includes a simple logging system using the `Logger` class. You can create a logger instance with a specific name and use it to log messages at different levels (INFO, WARNING, ERROR, and DEBUG).
@@ -124,10 +165,30 @@ logger.setup(LogLevel::INFO, logFile);
 
 For examples on how to use FLIP-LIB, please refer to the [examples](examples) directory in the repository.
 
-## API Reference
-
-For a detailed API reference, please refer to the [API documentation](docs/api.md).
-
 ## License
 
-FLIP-LIB is released under the MIT License. See the [LICENSE](LICENSE) file for more information.
+FLIP-LIB is released under the following open-source license:
+
+```
+MIT License
+
+Copyright (c) 2024 b3w/popochoune
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
