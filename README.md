@@ -22,7 +22,7 @@ FLIP-LIB is a C++ library that provides a simple way to create network applicati
 To install FLIP-LIB, simply clone the repository and include the necessary headers in your project.
 
 ```bash
-git clone https://github.com/your-username/flip-lib.git
+git clone git@github.com:b3ww/FLIP-LIB.git
 ```
 
 ## Usage
